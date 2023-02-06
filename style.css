@@ -67,3 +67,12 @@ p {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+#svgmap {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  display: block;
+  margin: auto;
+  width: 100%;
+  height: 98vh;
+}
