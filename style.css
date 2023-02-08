@@ -14,7 +14,7 @@ p {
   color: purple;
   font-size: 18px;
   line-height: 1.5;
-  margin: 20px;
+  margin: 10px;
 }
 
  .box1 {
@@ -45,15 +45,36 @@ p {
   box-sizing: border-box;
 }
 
+#button_home {
+	position: absolute;
+	margin-left: 820px;
+	margin-top: 15px;
+}
+
 .button {
-	padding: 10px 20px;
-	border-radius: 5px;
-	border: none;
-	background-color: green;
-	color: white;
-	cursor: pointer;
-	margin-bottom: 10px;
-  }
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.5s ease;
+}
+
+.button:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 0px 10px #4CAF50;
+}
+
+.button:active {
+  transform: scale(0.9);
+  box-shadow: 0px 0px 20px #4CAF50;
+}
 
 .disabledbutton {
   padding: 10px 20px;
@@ -115,4 +136,23 @@ background-color: #808080;
   width: 200px;
   margin-top: 10px;
   margin-left: 10px;
+}
+
+#button_canvasgame {
+	position: relative;
+}
+
+#myCanvas {
+    border: 1px solid black;
+    display: block;
+    margin: 0 auto;
+	margin-top: 10px;
+	padding: 20px;
+	background-color: #5A5A5A;
+  }
+  
+ #button_canvasgame_home {
+    display: block;
+    margin: 0 auto;
+	margin-top: 10px;
 }
