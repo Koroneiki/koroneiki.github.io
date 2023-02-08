@@ -1,16 +1,16 @@
 const canvas = document.getElementById("myCanvas");
 const context = canvas.getContext("2d");
 
-const text_var = "\u26BD";
+const text_var = "Mars";
 
 let textx = 50;
 let texty = 50;
-let vtextx = 6;
-let vtexty = 6;
+let vtextx = 3;
+let vtexty = 3;
 let atextx = 0.0;
-let atexty = 0.0;
+let atexty = 0.5;
 
-context.font = "30px Arial";
+context.font = "50px Arial";
 context.fillStyle = "blue";
 context.strokeStyle = "red";
 
@@ -21,20 +21,24 @@ function moveText() {
   vtexty += atexty;
 
   // check for collision with bottom wall
-  if (texty + 28 >= canvas.height) {
+  if (texty + 35 >= canvas.height) {
+	texty -= vtexty;
     vtexty = -vtexty;
   }
   // check for collision with top wall
-  if (texty - 32 <= 0) {
+  if (texty - 25 <= 0) {
+	texty -= vtexty;
     vtexty = -vtexty;
   }
   
   // check for collision with right wall
   if (textx + context.measureText(text_var).width + 5 >= canvas.width) {
+	textx -= vtextx
     vtextx = -vtextx;
   }
   // check for collision with left wall
-  if (textx <= 0) {
+  if (textx + 5 <= 0) {
+	textx -= vtextx
     vtextx = -vtextx;
   }
 }
@@ -49,3 +53,28 @@ function generateFrame() {
 
 var dt = 1000 / 25;
 setInterval(generateFrame, dt);
+
+document.onkeydown = function(button)
+{
+	if(button.keyCode == 39)
+	{
+		atextx = atextx + 1;
+	}
+	if(button.keyCode == 37)
+	{
+		atextx = atextx - 1;
+	}
+}
+
+document.onkeyup = function(button)
+{
+	if(button.keyCode == 39)
+	{
+		atextx = 0;
+	}
+	if(button.keyCode == 37)
+	{
+		atextx = 0;
+	}
+}
+
