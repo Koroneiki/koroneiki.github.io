@@ -143,13 +143,14 @@ background-color: #808080;
 }
 
 #myCanvas {
-    border: 1px solid black;
-    display: block;
-    margin: 0 auto;
-	margin-top: 10px;
-	padding: 20px;
-	background-color: #5A5A5A;
-  }
+  border: 2px solid #000000;
+  display: block;
+  margin: 0 auto;
+  background-color: #5A5A5A;
+  margin-top: 20px;
+  box-shadow: 3px 3px 10px 3px rgba(0,0,0,0.5);
+}
+
   
  #button_canvasgame_home {
     display: block;
