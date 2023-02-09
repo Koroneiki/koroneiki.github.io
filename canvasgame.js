@@ -5,8 +5,8 @@ const text_var = "\u26BD";
 
 let textx = 100;
 let texty = 60;
-let vtextx = 0.5;
-let vtexty = 0.3;
+let vtextx = 1;
+let vtexty = 0.6;
 let atextx = 0.0;
 let atexty = 0.05;
 
@@ -20,25 +20,32 @@ function moveText() {
   vtextx += atextx;
   vtexty += atexty;
 
-  // check for collision with bottom wall
+// check for collision with bottom wall
   if (texty >= canvas.height) {
-	texty -= vtexty;
-    vtexty = -vtexty;
+    texty -= vtexty;
+    vtexty = -vtexty * 0.9;
+    atexty *= 1.1;
+    if (atexty > 0.3) {
+      atexty = 0.3;
+	  vtexty = 0;
+	  vtextx = 0;
+    }
   }
+
   // check for collision with top wall
   if (texty - 35 <= 0) {
-	texty -= vtexty;
+    texty -= vtexty;
     vtexty = -vtexty;
   }
   
   // check for collision with right wall
   if (textx + context.measureText(text_var).width + 5 >= canvas.width) {
-	textx -= vtextx;
+    textx -= vtextx;
     vtextx = -vtextx;
   }
   // check for collision with left wall
   if (textx + 5 <= 0) {
-	textx -= vtextx;
+    textx -= vtextx;
     vtextx = -vtextx;
   }
 }
@@ -51,14 +58,37 @@ function generateFrame() {
   context.strokeText("", textx, texty);
 }
 
-var dt = 1000 / 25;
-setInterval(generateFrame, dt);
 
+var mousepress = false;
+var mausx_current, mausy_current;
+var mausx_recent, mausy_recent;
+
+canvas.onmousedown = function(event) {
+	mousepress = false;
+	canvas.style.cursor = "grabbing";
+	var mpos = getCanvasMousePosition(event.clientX,event.clientY);
+	document.getElementbyID("mausx").innerHTML = "Maus-x: " + mpos.x;
+	document.getElementById("mausy").innerHTML = "Maus-y: " + mpos.y;
+	mausx_current = pos.x;
+	mausy_current = pos.y;
+}
+
+canvas.onmouseup = function(event) {
+	mousepress = false;
+	canvas.style.cursor = "grab";
+	var mpos = getCanvasMousePosition(event.clientX,event.clientY);
+	document.getElementbyID("mausx").innerHTML = "Maus-x: " + mpos.x;
+	document.getElementById("mausy").innerHTML = "Maus-y: " + mpos.y;
+	mausx_current = pos.x;
+	mausy_current = pos.y;
+}
 
 canvas.onmousemove = function(event) {
   var mpos = getCanvasMousePosition(event.clientX,event.clientY);
   document.getElementById("mausx").innerHTML = "Maus-x: " + mpos.x;
   document.getElementById("mausy").innerHTML = "Maus-y: " + mpos.y;
+  mausx_current = pos.x;
+  mausy_current = pos.y;
 }
 
 canvas.onmouseout = canvas.onmouseleave = function() {
@@ -76,5 +106,6 @@ function getCanvasMousePosition(px,py) {
   return pos;
 }
 
-
+var dt = 1000 / 100;
+setInterval(generateFrame, dt);
 
