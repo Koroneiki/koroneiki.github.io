@@ -15,3 +15,13 @@ inputField.addEventListener("input", function() {
     counter.innerHTML = `${correctlyGuessedCountries}/44`;
   }
 });
+
+ paths.forEach(path => {
+    path.addEventListener('mouseover', function() {
+      document.querySelector('#country_name').innerHTML = this.getAttribute('name');
+      document.querySelector('#country_name').style.display = 'block';
+    });
+    path.addEventListener('mouseout', function() {
+      document.querySelector('#country_name').style.display = 'none';
+    });
+  });
