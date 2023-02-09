@@ -1,14 +1,14 @@
 const canvas = document.getElementById("myCanvas");
 const context = canvas.getContext("2d");
 
-const text_var = "Mars";
+const text_var = "\u26BD";
 
-let textx = 50;
-let texty = 50;
-let vtextx = 3;
-let vtexty = 3;
+let textx = 100;
+let texty = 60;
+let vtextx = 0.5;
+let vtexty = 0.3;
 let atextx = 0.0;
-let atexty = 0.5;
+let atexty = 0.05;
 
 context.font = "50px Arial";
 context.fillStyle = "blue";
@@ -21,24 +21,24 @@ function moveText() {
   vtexty += atexty;
 
   // check for collision with bottom wall
-  if (texty + 35 >= canvas.height) {
+  if (texty >= canvas.height) {
 	texty -= vtexty;
     vtexty = -vtexty;
   }
   // check for collision with top wall
-  if (texty - 25 <= 0) {
+  if (texty - 35 <= 0) {
 	texty -= vtexty;
     vtexty = -vtexty;
   }
   
   // check for collision with right wall
   if (textx + context.measureText(text_var).width + 5 >= canvas.width) {
-	textx -= vtextx
+	textx -= vtextx;
     vtextx = -vtextx;
   }
   // check for collision with left wall
   if (textx + 5 <= 0) {
-	textx -= vtextx
+	textx -= vtextx;
     vtextx = -vtextx;
   }
 }
@@ -54,27 +54,27 @@ function generateFrame() {
 var dt = 1000 / 25;
 setInterval(generateFrame, dt);
 
-document.onkeydown = function(button)
-{
-	if(button.keyCode == 39)
-	{
-		atextx = atextx + 1;
-	}
-	if(button.keyCode == 37)
-	{
-		atextx = atextx - 1;
-	}
+
+canvas.onmousemove = function(event) {
+  var mpos = getCanvasMousePosition(event.clientX,event.clientY);
+  document.getElementById("mausx").innerHTML = "Maus-x: " + mpos.x;
+  document.getElementById("mausy").innerHTML = "Maus-y: " + mpos.y;
 }
 
-document.onkeyup = function(button)
-{
-	if(button.keyCode == 39)
-	{
-		atextx = 0;
-	}
-	if(button.keyCode == 37)
-	{
-		atextx = 0;
-	}
+canvas.onmouseout = canvas.onmouseleave = function() {
+  document.getElementById("mausx").innerHTML = "Maus-x: ";
+  document.getElementById("mausy").innerHTML = "Maus-y: ";
 }
+
+function getCanvasMousePosition(px,py) {
+  var box = canvas.getBoundingClientRect();
+  var pos = 
+  {
+    x: px - box.left,
+    y: py - box.top
+  }
+  return pos;
+}
+
+
 
