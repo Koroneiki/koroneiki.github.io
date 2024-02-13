@@ -13,15 +13,22 @@
 <body>
     <div id="map"></div>
 
-    <div class="radio-container">
-        <label>
-            <input type="radio" id="mapOption1" name="mapOption1" value="NoMap" checked>
-            Ohne
-        </label>
-        <label>
-            <input type="radio" id="mapOption2" name = "mapOption2" value="SatelliteMap">
-            Satellit
-        </label>
+    <div class="upper_left-container">
+        <div class="radio-container">
+            <label>
+                <input type="radio" id="mapOption1" name="mapOption1" value="NoMap" checked>
+                Ohne
+            </label>
+            <label>
+                <input type="radio" id="mapOption2" name="mapOption2" value="SatelliteMap">
+                Satellit
+            </label>
+        </div>
+
+        <div class="score-container">
+            <p id="guessed_cities">Number of cities guessed: 0</p>
+            <p id="total_population">Total population: 0</p>
+        </div>
     </div>
 
     <div class="search-container">
@@ -34,5 +41,6 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script type="module" src="map.js"></script>
     <script src="https://unpkg.com/leaflet-search"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 </body>
 </html>

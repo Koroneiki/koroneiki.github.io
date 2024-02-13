@@ -1,51 +1,85 @@
-
-
 function loadCountries(map) {
-    // Load the countries.json file
-    fetch('countries.json')
+    const apiUrl = 'https://public.opendatasoft.com/api/records/1.0/search/?dataset=georef-world-country&rows=250&facet=sovereignt';
+
+    // Get the current time before making the API request
+    const startTime = new Date();
+
+    // Load countries data from the API URL
+    fetch(apiUrl)
     .then(response => response.json())
     .then(countriesData => {
+
+        // Get the current time after receiving the API response
+        const endTime = new Date();
+        const responseTime = endTime - startTime;
+        console.log("API response time:", responseTime, "milliseconds");
+
         console.log("Countries data:", countriesData); // Debugging: Log the loaded countries data
         
-        // Extract the alpha3 codes of sovereign countries
-        const sovereignCountries = countriesData.map(country => country.alpha3.toLowerCase());
-        console.log("Sovereign countries:", sovereignCountries); // Debugging: Log the sovereign countries list
+        // Extract features from the API response
+        const features = countriesData.records.map(record => ({
+            type: 'Feature',
+            geometry: record.fields.geo_shape,
+            properties: {
+                name: record.fields.cntry_name_en, // Assuming the English name is available
+                code: record.fields.cntry_area_code // Assuming the country code is available
+            }
+        }));
+        console.log(features);
+
         
-        // Load the alle länder.json GeoJSON file
-        fetch('alle länder.json')
-        .then(response => response.json())
-        .then(data => {
-            console.log("GeoJSON data:", data); // Debugging: Log the loaded GeoJSON data
-            
-            // Filter the GeoJSON data to only include features with iso_a3 codes found in sovereignCountries
-            const filteredData = data.features.filter(feature => {
-                // Convert iso_a3 to lowercase for case-insensitive comparison
-                const isoA3 = feature.properties.iso_a3.toLowerCase();
-                const isoA3_eh = feature.properties.iso_a3_eh.toLowerCase();
-                return sovereignCountries.includes(isoA3) || sovereignCountries.includes(isoA3_eh);
-            });
-            
-            console.log("Filtered data:", filteredData); // Debugging: Log the filtered GeoJSON data
-            
-            // Add the filtered GeoJSON data to the map and define a click event
-            L.geoJSON(filteredData, {
-                style: function(feature) {
-                    return {
-                        fillColor: '#3388ff', // Standard color for countries
-                        weight: 2, // Set a small border weight to maintain visual separation
-                        opacity: 1,
-                        color: 'blue', // Set border color to match fill color
-                        fillOpacity: 0.7
-                    };
-                },
-                onEachFeature: function(feature, layer) {
-                    layer.on('click', function() {
-                        layer.setStyle({fillColor: '#ff5733', color: '#ff5733'}); // Change the color of the clicked country
-                        console.log(feature.properties.name); // Log the name of the country to the console
-                    });
+        console.log("Country names:", features.map(feature => feature.properties.name));
+
+
+        // Function to find neighboring countries of a given country
+        function findNeighboringCountries(countryName) {
+            const country = features.find(feature => feature.properties.name === countryName);
+            if (!country) {
+                console.log('Country not found');
+                return;
+            }
+
+            const neighboringCountries = features.filter(feature => {
+                if (feature.properties.name !== countryName) {
+                    // Check if the geometries intersect using Turf.js
+                    return turf.booleanIntersects(country.geometry, feature.geometry);
                 }
-            }).addTo(map);
-        });
+                return false;
+            }).map(feature => feature.properties.name);
+
+            console.log(`Neighboring countries of ${countryName}:`, neighboringCountries);
+        }
+
+        // Example usage
+        const countryToFind = "Germany";
+        findNeighboringCountries(countryToFind);
+
+        const germanyFeature = features.find(feature => feature.properties.name === "Germany");
+        console.log(germanyFeature);
+
+
+        // Add the filtered GeoJSON data to the map and define a click event
+        L.geoJSON(features, {
+            style: function(feature) {
+                return {
+                    fillColor: 'blue', // Standard color for countries
+                    weight: 2,
+                    //stroke: false, 
+                    opacity: 1,
+                    color: 'red', // Set border color to match fill color
+                    fillOpacity: 0.7,
+                };
+            },
+
+            
+
+            onEachFeature: function(feature, layer) {
+                layer.on('click', function() {
+                    layer.setStyle({fillColor: '#ff5733', color: '#ff5733'}); // Change the color of the clicked country
+                    console.log(feature.properties.name); // Log the name of the country to the console
+                });
+            }
+        }).addTo(map);
     });
 }
 

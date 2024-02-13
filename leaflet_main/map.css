@@ -1,9 +1,13 @@
 /* style.css */
 
+* {
+    font-family: "Courier New", Courier, monospace;
+}
+
 body, html {
     height: 100%;
     margin: 0;
-    font-family: "Courier New", Courier, monospace;
+    overflow: hidden;
 }
 
 #map {
@@ -75,4 +79,18 @@ body, html {
 
 .radio-container input[type="radio"] {
     margin-right: 5px;
+}
+
+.score-container {
+    position: absolute;
+    top: 100px; /* Adjust as needed */
+    left: 20px; /* Adjust as needed */
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.score-container p {
+    margin-bottom: none;
 }

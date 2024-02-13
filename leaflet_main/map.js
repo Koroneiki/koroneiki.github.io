@@ -5,6 +5,7 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 
 var default_map_url = "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png";
 
+
 const input = document.getElementById('input');
 const search_button = document.getElementById('search_button');
 
@@ -118,3 +119,4 @@ document.querySelectorAll('input[name="mapOption1"], input[name="mapOption2"]').
         }
     });
 });
+
