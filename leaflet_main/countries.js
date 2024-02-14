@@ -51,11 +51,8 @@ function loadCountries(map) {
         }
 
         // Example usage
-        const countryToFind = "Germany";
+        const countryToFind = "Denmark";
         findNeighboringCountries(countryToFind);
-
-        const germanyFeature = features.find(feature => feature.properties.name === "Germany");
-        console.log(germanyFeature);
 
 
         // Add the filtered GeoJSON data to the map and define a click event

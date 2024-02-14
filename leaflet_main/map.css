@@ -1,4 +1,4 @@
-/* style.css */
+
 
 * {
     font-family: "Courier New", Courier, monospace;
@@ -62,6 +62,7 @@ body, html {
     cursor: pointer;
 }
 
+
 .radio-container {
     position: absolute;
     top: 20px; /* Adjust as needed */
@@ -93,4 +94,17 @@ body, html {
 
 .score-container p {
     margin-bottom: none;
+}
+
+.slider-container {
+    position: absolute;
+    width: 300px;
+    top: 200px;
+    left: 10px;
+    margin: 20px;
+    z-index: 1000;
+}
+
+.slider-container label {
+    display: block;
 }
