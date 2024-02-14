@@ -13,19 +13,19 @@ body, html {
 #map {
     position: relative;
     width: 100%;
-    height: 100vh; /* Adjust to fit your fullscreen map */
+    height: 100vh;
 }
 
 .custom-circle-icon {
-    width: 10px; /* Set the width of the icon */
-    height: 10px; /* Set the height of the icon */
+    width: 10px; 
+    height: 10px;
 }
   
 .circle {
-    width: 100%; /* Set the width of the circle to fill the container */
-    height: 100%; /* Set the height of the circle to fill the container */
-    border-radius: 50%; /* Make the div a circle by setting border radius to 50% */
-    background-color: red; /* Set the background color of the circle */
+    width: 100%; 
+    height: 100%;
+    border-radius: 50%; 
+    background-color: red; 
 }
 
 .search-container {
@@ -65,8 +65,8 @@ body, html {
 
 .radio-container {
     position: absolute;
-    top: 20px; /* Adjust as needed */
-    left: 20px; /* Adjust as needed */
+    top: 20px; 
+    left: 20px; 
     background-color: #ffffff;
     padding: 10px;
     border-radius: 5px;
@@ -84,8 +84,8 @@ body, html {
 
 .score-container {
     position: absolute;
-    top: 100px; /* Adjust as needed */
-    left: 20px; /* Adjust as needed */
+    top: 100px; 
+    left: 20px;
     background-color: #ffffff;
     padding: 10px;
     border-radius: 5px;

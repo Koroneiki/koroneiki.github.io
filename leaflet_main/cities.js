@@ -50,7 +50,7 @@ export function loadCities(map, cityName, callback) {
 
                 // Iterate over the cities array
                 for (const city of cities) {
-                    // Check if the current city's id matches cityData.geoname_id
+                    
                     if (city.geoname_id === cityData.geoname_id) {
                         console.log("City already guessed.");
                         callback(false);
@@ -58,15 +58,15 @@ export function loadCities(map, cityName, callback) {
                     }
                 }
 
-                // Push city properties to the cities array
+                
                 cities.push(cityProperties);
                 
 
-                // Now you have an object containing properties for the city
+                
                 console.log(cityProperties);
                 console.log(cities);
 
-                // Extract city properties from the API response
+                
                 const cityName = cityData.name;
                 const cityCoordinates = [cityData.coordinates.lat, cityData.coordinates.lon];
                 const cityPopulation = cityData.population;
@@ -88,14 +88,14 @@ export function loadCities(map, cityName, callback) {
                     coordinates: cityCoordinates
                 }).addTo(map);
 
-                // Create the content for the popup, including city name and population
+                // Create the content for the popup
                 const popupContent = `<b>${cityName}</b><br>Population: ${cityPopulation.toLocaleString()}`;
 
                 // Bind the popup with the content to the circle marker
                 circle.bindPopup(popupContent);
 
 
-                // Call the callback with a truthy value to indicate success
+                
                 callback(true);
             } else {
                 console.error('City data not found.');
@@ -108,7 +108,6 @@ export function loadCities(map, cityName, callback) {
             callback(false);
         });
 
-    // Function to update the population counter
     function updatePopulationandCityCounter(population) {
         totalPopulation += population;
         guessedCities = cities.length;
@@ -120,16 +119,13 @@ export function loadCities(map, cityName, callback) {
 
 
 export function getRadiusFromPopulation(population, scalingFactorPopulation) {
-    // Multiply population by 1000 to adjust for scale
+
     const scaledPopulation = population * scalingFactorPopulation;
 
-    // Define a base radius value
-    const baseRadius = 600; // Adjust as needed
+    const baseRadius = 600;
 
-    // Define the scaling factor
-    const scalingFactor = 0.05; // Adjust as needed
+    const scalingFactor = 0.05;
 
-    // Calculate the radius based on the scaled population using a logarithmic function
     const radius = Math.sqrt(scaledPopulation * scalingFactor) + baseRadius;
 
     return radius;

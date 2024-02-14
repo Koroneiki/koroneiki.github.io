@@ -22,7 +22,7 @@ var map = L.map('map', {
     ],
     zoomControl: false,
     layers: [
-        L.tileLayer(default_map_url, { // Verwende die bereitgestellte ArcGIS Online-Karte
+        L.tileLayer(default_map_url, { 
         attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
         })
     ]
@@ -32,8 +32,7 @@ var map = L.map('map', {
 
 // Retrieve the selected option value from sessionStorage
 var selectedOption = sessionStorage.getItem('selectedOption');
-
-// Use the selectedOption value to determine the context and perform necessary actions
+s
 if (selectedOption === 'city') {
     console.log("city");
     
@@ -52,7 +51,7 @@ function addCustomZoomControl(map) {
         position: 'bottomright' // Positioniere die Zoom-Steuerung unten rechts
     });
 
-    // Füge die angepasste Zoom-Steuerung zur Karte hinzu
+    
     zoomControl.addTo(map);
 }
 
@@ -61,28 +60,28 @@ addCustomZoomControl(map);
 
 
 function eventlisteners() {
-    // Attach an event listener to the input element for keypress event
+    
     input.addEventListener('keypress', function(event) {
         // Check if the pressed key is the Enter key (key code 13)
         if (event.keyCode === 13) {
-            // Call the searchCity function when Enter key is pressed
+            
             searchCity();
         }
     });
 
-    // Attach an event listener to the search button for click event
+    
     search_button.addEventListener('click', function() {
-        // Call the searchCity function when the search button is clicked
+        
         searchCity();
     });
 
-    // Attach an event listener to the input element
+    
     input.addEventListener('input', function() {
-        // Call your function here
+        
         handleInputChange();
     });
 
-    // Add event listener to both radio buttons
+    
     document.querySelectorAll('input[name="mapOption1"], input[name="mapOption2"]').forEach(function(radio) {
         radio.addEventListener('change', function() {
             console.log('Radio button changed:', this.value);
@@ -103,7 +102,6 @@ function eventlisteners() {
     });
 
     function searchCity() {
-        // Get the value from the input field
         const cityName = input.value;
         console.log(cityName);
         citiesFunctions.loadCities(map, cityName, function(success) {
@@ -113,12 +111,12 @@ function eventlisteners() {
         });
     }
     
-    // Define the function to be called when the input changes
+    
     function handleInputChange() {
         console.log('Input value changed');
     }
     
-    // Function to set the tile layer
+    
     function setTileLayer(layer) {
         
         console.log('Setting tile layer:', layer);
@@ -157,7 +155,7 @@ slider.addEventListener("input", function() {
     updateCircleRadius(parseFloat(slider.value)); // Convert slider value to a float
 });
 
-// Function to update the circle radius based on the scaling factor
+
 function updateCircleRadius(scalingFactor) {
     // Loop through each circle marker and update its radius
     map.eachLayer(function(layer) {

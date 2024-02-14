@@ -14,15 +14,15 @@ function loadCountries(map) {
         const responseTime = endTime - startTime;
         console.log("API response time:", responseTime, "milliseconds");
 
-        console.log("Countries data:", countriesData); // Debugging: Log the loaded countries data
+        console.log("Countries data:", countriesData);
         
         // Extract features from the API response
         const features = countriesData.records.map(record => ({
             type: 'Feature',
             geometry: record.fields.geo_shape,
             properties: {
-                name: record.fields.cntry_name_en, // Assuming the English name is available
-                code: record.fields.cntry_area_code // Assuming the country code is available
+                name: record.fields.cntry_name_en, 
+                code: record.fields.cntry_area_code 
             }
         }));
         console.log(features);
@@ -50,7 +50,7 @@ function loadCountries(map) {
             console.log(`Neighboring countries of ${countryName}:`, neighboringCountries);
         }
 
-        // Example usage
+        
         const countryToFind = "Denmark";
         findNeighboringCountries(countryToFind);
 
@@ -59,11 +59,11 @@ function loadCountries(map) {
         L.geoJSON(features, {
             style: function(feature) {
                 return {
-                    fillColor: 'blue', // Standard color for countries
+                    fillColor: 'blue', // Standard color
                     weight: 2,
                     //stroke: false, 
                     opacity: 1,
-                    color: 'red', // Set border color to match fill color
+                    color: 'red', // Set border color
                     fillOpacity: 0.7,
                 };
             },
@@ -73,7 +73,7 @@ function loadCountries(map) {
             onEachFeature: function(feature, layer) {
                 layer.on('click', function() {
                     layer.setStyle({fillColor: '#ff5733', color: '#ff5733'}); // Change the color of the clicked country
-                    console.log(feature.properties.name); // Log the name of the country to the console
+                    console.log(feature.properties.name); 
                 });
             }
         }).addTo(map);
