@@ -32,7 +32,7 @@ var map = L.map('map', {
 
 // Retrieve the selected option value from sessionStorage
 var selectedOption = sessionStorage.getItem('selectedOption');
-s
+
 if (selectedOption === 'city') {
     console.log("city");
     
