@@ -15,13 +15,18 @@
 
     <div class="upper_left-container">
         <div class="radio-container">
+            <p>Basemap</p>
             <label>
-                <input type="radio" id="mapOption1" name="mapOption1" value="NoMap" checked>
+                <input type="radio" id="mapOption1" name="mapOption1" value="NoMap">
                 Ohne
             </label>
             <label>
-                <input type="radio" id="mapOption2" name="mapOption2" value="SatelliteMap">
+                <input type="radio" id="mapOption2" name="mapOption2" value="SatelliteMap" checked>
                 Satellit
+            </label>
+            <label>
+                <input type="radio" id="mapOption3" name="mapOption3" value="NoLabelsMap">
+                NoLabels
             </label>
         </div>
 
@@ -29,11 +34,22 @@
             <p id="guessed_cities">Number of cities guessed: 0</p>
             <p id="total_population">Total population: 0</p>
         </div>
+
+        <div class="score-container-click">
+            <p id="guessed-cities">Cities guessed: <span id="guessed-count">0</span></p>
+            <p id="total-cities">Total cities: <span id="total-count">0</span></p>
+        </div>
+        
+
         <div class="slider-container">
             <input type="range" id="scaling-slider" min="5000" max="100000" step="10" value="5000">
             <label for="scaling-slider">Population Skalierer</label>
         </div>
         <div id="current-value"></div>
+    </div>
+
+    <div id="city-name-container">
+        
     </div>
 
     <div class="search-container">

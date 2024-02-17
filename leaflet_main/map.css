@@ -63,48 +63,50 @@ body, html {
 }
 
 
-.radio-container {
+.upper_left-container {
     position: absolute;
     top: 20px; 
     left: 20px; 
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 1000;  
-}
-
-.radio-container label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.radio-container input[type="radio"] {
-    margin-right: 5px;
-}
-
-.score-container {
-    position: absolute;
-    top: 100px; 
-    left: 20px;
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 5px;
     z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.7); 
+    border: 2px solid black;
+    padding: 20px;
+    border-radius: 10px;
+    
 }
 
-.score-container p {
-    margin-bottom: none;
-}
-
+.radio-container,
+.score-container,
+.score-container-click,
 .slider-container {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid black;
+    margin-bottom: 20px;
+    border-radius: 20px;
+}
+
+
+
+.custom-popup {
     position: absolute;
-    width: 300px;
-    top: 200px;
-    left: 10px;
-    margin: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    pointer-events: none; /* This prevents the popup from blocking mouse events */
     z-index: 1000;
 }
 
-.slider-container label {
-    display: block;
+#city-name-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    z-index: 1000;
 }

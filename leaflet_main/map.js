@@ -1,19 +1,14 @@
 
-import * as countriesFunctions from './countries.js';
-import * as citiesFunctions from './cities.js';
-
-var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-});
-
-var default_map_url = "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png";
+import './eventlisteners.js';
+import { searchCity} from './functions.js';
+import { returnCities } from './cities.js';
 
 
-const input = document.getElementById('input');
-const search_button = document.getElementById('search_button');
+var default_map_url = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+
 
 // Initialisiere die Leaflet-Karte
-var map = L.map('map', {
+export var map = L.map('map', {
     center: [51.1657, 10.4515], // Zentriere die Karte auf Deutschland
     zoom: 6, // Passe den initialen Zoom-Level bei Bedarf an
     maxBounds: [ // Definiere den maximalen Bereich der Karte
@@ -28,141 +23,174 @@ var map = L.map('map', {
     ]
 });
 
+//MAP-OPTIONS
+function mapOptions (map) {
 
+    addCustomZoomControl(map);
 
-// Retrieve the selected option value from sessionStorage
-var selectedOption = sessionStorage.getItem('selectedOption');
+    function addCustomZoomControl(map) {
+        // Erstelle eine neue Instanz der Zoom-Steuerung mit Optionen
+        var zoomControl = L.control.zoom({
+            position: 'bottomright' // Positioniere die Zoom-Steuerung unten rechts
+        });
 
-if (selectedOption === 'city') {
-    console.log("city");
-    
-} else if (selectedOption === 'country') {
-    console.log("country");
-    countriesFunctions.loadCountries(map);
+        
+        zoomControl.addTo(map);
+    }
 }
+mapOptions(map);
 
 
 
+async function gameFunction() {
+    // Retrieve the selected option value from sessionStorage
+    //var selectedOption = sessionStorage.getItem('selectedOption');
+    var selectedOption = indexJSvalue;
 
+    // Check if selectedOption is not null
+    if (selectedOption) {
+        // Depending on the value, carry out different actions
+        if (selectedOption === 'Free_Mode') {
 
-function addCustomZoomControl(map) {
-    // Erstelle eine neue Instanz der Zoom-Steuerung mit Optionen
-    var zoomControl = L.control.zoom({
-        position: 'bottomright' // Positioniere die Zoom-Steuerung unten rechts
-    });
+            var scoreContainerclick = document.querySelector('.score-container-click');
+            if (scoreContainerclick) {
+                scoreContainerclick.style.display = 'none';
+            }
 
-    
-    zoomControl.addTo(map);
-}
-
-
-addCustomZoomControl(map);
-
-
-function eventlisteners() {
-    
-    input.addEventListener('keypress', function(event) {
-        // Check if the pressed key is the Enter key (key code 13)
-        if (event.keyCode === 13) {
             
-            searchCity();
-        }
-    });
+        } else if (selectedOption === 'DE_Cities') {
+            
+            var scoreContainer = document.querySelector('.score-container');
+            if (scoreContainer) {
+                scoreContainer.style.display = 'none';
+            }
 
-    
-    search_button.addEventListener('click', function() {
-        
-        searchCity();
-    });
+            var searchcontainer = document.querySelector('.search-container');
+            if (searchcontainer) {
+                searchcontainer.style.display = 'none';
+            }
 
-    
-    input.addEventListener('input', function() {
-        
-        handleInputChange();
-    });
 
-    
-    document.querySelectorAll('input[name="mapOption1"], input[name="mapOption2"]').forEach(function(radio) {
-        radio.addEventListener('change', function() {
-            console.log('Radio button changed:', this.value);
-            if (this.checked) {
-                if (this.value === 'NoMap') {
-                    console.log('Selected: No Map');
-                    setTileLayer(null); // Remove the basemap layer
-                    // Uncheck the other radio button if it's checked
-                    document.querySelector('input[name="mapOption2"][value="SatelliteMap"]').checked = false;
-                } else if (this.value === 'SatelliteMap') {
-                    console.log('Selected: Satellite Map');
-                    setTileLayer(Esri_WorldImagery); // Set the satellite map layer
-                    // Uncheck the other radio button if it's checked
-                    document.querySelector('input[name="mapOption1"][value="NoMap"]').checked = false;
+
+            custompopupEnabled(false);
+            clickEnabled(true);
+
+            await searchCity(map);
+
+            const cities = returnCities();
+            console.log(cities);
+
+
+            // Function to shuffle an array
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
                 }
+                return array;
             }
-        });
-    });
 
-    function searchCity() {
-        const cityName = input.value;
-        console.log(cityName);
-        citiesFunctions.loadCities(map, cityName, function(success) {
-            if (success) {
-                input.value = "";
+            // Function to update the score container with the number of guessed cities and total cities
+            function updateScoreContainer(guessedCount, totalCount) {
+                const scoreContainer = document.querySelector('.score-container-click');
+                const guessedCitiesElement = scoreContainer.querySelector('#guessed-count');
+                const totalCitiesElement = scoreContainer.querySelector('#total-count');
+                guessedCitiesElement.textContent = guessedCount;
+                totalCitiesElement.textContent = totalCount;
             }
-        });
-    }
-    
-    
-    function handleInputChange() {
-        console.log('Input value changed');
-    }
-    
-    
-    function setTileLayer(layer) {
-        
-        console.log('Setting tile layer:', layer);
-        map.eachLayer(function (currentLayer) {
-            if (currentLayer instanceof L.TileLayer) {
-                console.log('Removing layer:', currentLayer);
-                map.removeLayer(currentLayer); // Remove basemap layers
+
+            // Update the city name element with the guessed city
+            function updateCityName(cityName) {
+                const cityNameContainer = document.getElementById('city-name-container');
+                cityNameContainer.textContent = cityName;
             }
-        });
-        if (layer) {
-            console.log('Adding new layer:', layer);
-            layer.addTo(map); // Add new layer if provided
-            layer.bringToBack();
+
+
+            // Function to start the guessing game with cities in random order
+            async function startGuessingGameRandomOrder(cities) {
+                // Shuffle the cities array
+                const shuffledCities = shuffleArray([...cities]);
+                
+                // Update the total number of cities in the score container
+                updateScoreContainer(0, shuffledCities.length);
+
+                // Initialize guessed cities count
+                let guessedCitiesCount = 0;
+
+                // Iterate over each city in the shuffled array
+                for (const correctCity of shuffledCities) {
+                    // Display the name of the city
+                    console.log("Guess the city:", correctCity.name);
+                    updateCityName(correctCity.name);
+
+                    // Add a click event listener to the circle
+                    const clickedCity = await new Promise(resolve => {
+                        if (clickEnabled) {
+                            cities.forEach(city => {
+
+                                city.circle.once('click', function(e) {
+                                    resolve(city);
+                                });
+                            });
+                        }
+                    });
+
+                    // Find the corresponding city object from the cities array
+                    const currentCity = cities.find(city => city.name === correctCity.name);
+
+                    // Update the guessed cities count and score container
+                    if (clickedCity === correctCity) {
+                        guessedCitiesCount++;
+                        updateScoreContainer(guessedCitiesCount, shuffledCities.length);
+                        console.log("Congratulations! You guessed correctly.");
+
+                        // Change the circle color to green
+                        currentCity.circle.setStyle({ fillColor: 'green' }); // Corrected variable name to currentCity
+                    } else {
+                        console.log("Sorry, wrong guess. The correct city was:", correctCity.name);
+                    }
+
+                }
+                alert(`You guessed ${guessedCitiesCount} cities correctly out of ${shuffledCities.length}.`);
+                updateCityName(`${guessedCitiesCount} cities correct out of ${shuffledCities.length}.`);
+
+
+            }
+
+            
+            startGuessingGameRandomOrder(cities);
+
+
+            
+
+
+
+
+
+
+
+            
+
+        } else {
+            // Handle unexpected values
+            console.error('Unexpected value stored in sessionStorage:', selectedOption);
         }
+    } else {
+        // Handle case where selected option is not found in sessionStorage
+        console.error('Selected option not found in sessionStorage.');
     }
-    
-
 }
 
-eventlisteners();
-
-
-
-
-
-
-
-
-const slider = document.getElementById("scaling-slider");
-const currentValue = document.getElementById("current-value");
-console.log(slider.value);
-
-slider.addEventListener("input", function() {
-    currentValue.textContent = `Current Scaling Factor: ${slider.value}`;
-    // Update the circle radius based on the new scaling factor
-    updateCircleRadius(parseFloat(slider.value)); // Convert slider value to a float
-});
-
-
-function updateCircleRadius(scalingFactor) {
-    // Loop through each circle marker and update its radius
-    map.eachLayer(function(layer) {
-        if (layer instanceof L.Circle) {
-            layer.setRadius(citiesFunctions.getRadiusFromPopulation(layer.options.population, scalingFactor));
-        }
-    });
+export function clickEnabled(value) {
+    return clickEnabled = value;
 }
 
+export function custompopupEnabled(value) {
+    return custompopupEnabled = value;
+}
 
+export var indexJSvalue = sessionStorage.getItem('selectedOption');
+
+
+
+gameFunction();

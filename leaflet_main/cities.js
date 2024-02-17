@@ -1,23 +1,16 @@
+
+
+import { custompopupEnabled } from "./map.js";
+
 let totalPopulation = 0;
 let guessedCities = 0;
 
 let cities = [];
 
-export function loadCities(map, cityName, callback) {
+
+
+export function loadCities(map, apiUrl, callback) {
     
-    // Function to convert string to title case
-    function toTitleCase(str) {
-        return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    }
-
-
-    // Convert cityName to lowercase and then to title case
-    const formattedCityName = toTitleCase(cityName.toLowerCase());
-
-    // Construct the API URL with the formatted cityName
-    const apiUrl = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000/records?where=alternate_names=\'' + encodeURIComponent(formattedCityName) + '\'&order_by=population%20desc&limit=1';
-    console.log(apiUrl);
-
     // Get the current time before making the API request
     const startTime = new Date();
 
@@ -25,7 +18,6 @@ export function loadCities(map, cityName, callback) {
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-
             // Get the current time after receiving the API response
             const endTime = new Date();
             const responseTime = endTime - startTime;
@@ -34,73 +26,129 @@ export function loadCities(map, cityName, callback) {
             console.log('API data loaded successfully:', data);
 
             // Extract city information from the API response
-            const cityData = data.results[0]; // Assuming the API returns the most relevant city as the first result
+            const cityResults = data.results; // Assuming the API returns multiple city results
 
-            if (cityData) {
-                
-                // Extract city properties
-                const cityProperties = {
-                    name: cityData.name,
-                    coordinates: [cityData.coordinates.lat, cityData.coordinates.lon],
-                    population: cityData.population,
-                    geoname_id: cityData.geoname_id
-                };
+            if (cityResults && cityResults.length > 0) {
+                cityResults.forEach(cityData => {
 
 
-
-                // Iterate over the cities array
-                for (const city of cities) {
-                    
-                    if (city.geoname_id === cityData.geoname_id) {
+                    // Check if the city has already been guessed
+                    if (cities.some(city => city.geoname_id === cityData.geoname_id)) {
                         console.log("City already guessed.");
-                        callback(false);
-                        return;
+                        
+                        
+                        return callback(false);
+                        
                     }
-                }
+
+                    const cityName = cityData.name;
+                    const cityCoordinates = [cityData.coordinates.lat, cityData.coordinates.lon];
+                    const cityPopulation = cityData.population;
+
+
+                    // Create a circle marker for the city with dynamic radius
+                    const circle = L.circle(cityCoordinates, {
+                        radius: getRadiusFromPopulation(cityPopulation, document.getElementById("scaling-slider").value),
+                        fillColor: 'red',
+                        color: 'black',
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 0.4,
+                        population: cityPopulation,
+                        id: cityData.geoname_id,
+                        coordinates: cityCoordinates
+                    }).addTo(map);
+
+
+
+                    // Extract city properties
+                    const cityProperties = {
+                        name: cityData.name,
+                        coordinates: [cityData.coordinates.lat, cityData.coordinates.lon],
+                        population: cityData.population,
+                        geoname_id: cityData.geoname_id,
+                        circle: circle
+                    };
+
+                    
+
+                    
+
+                    callback(true);
+
+                    cities.push(cityProperties);
+
+                    console.log(cityProperties);
+                    console.log(cities);
+
+                    
+                    updatePopulationandCityCounter(cityPopulation);
+                    
+                    
+
+                    circle.on('click', function() {
+                        console.log(cityName);
+                    });
+
+
+                    if(custompopupEnabled) {
+                        // Define custom HTML content for the popup
+                        const customPopupContent = document.createElement('div');
+                        customPopupContent.className = 'custom-popup';
+                        customPopupContent.innerHTML = `<b>${cityName}</b><br>Population: ${cityPopulation.toLocaleString()}`;
+
+                        // Hide the custom popup initially
+                        customPopupContent.style.display = 'none';
+                        customPopupContent.style.zIndexOffset = '1000';
+
+                        // Add the custom popup content to the map container
+                        map.getContainer().appendChild(customPopupContent);
+                        
+
+                        
+                                // Add hover animation on mouseover
+                            circle.on('mouseover', function (e) {
+                                this.setStyle({
+                                    fillColor: 'lightcoral' // Change fill color on hover
+                                });
+                                customPopupContent.style.display = 'block';
+                                updatePopupPosition(e);
+                            });
+
+                            // Remove hover animation on mouseout
+                            circle.on('mouseout', function (e) {
+                                this.setStyle({
+                                    fillColor: 'red' // Restore original fill color on mouseout
+                                });
+                                customPopupContent.style.display = 'none';
+                            });
+
+                            // Update the position of the custom popup based on the mouse cursor
+                            map.on('mousemove', function (e) {
+                                updatePopupPosition(e);
+                            });
+
+                            // Function to update the position of the custom popup based on the mouse cursor
+                            function updatePopupPosition(e) {
+                                const offsetX = 0;
+                                const offsetY = -customPopupContent.offsetHeight;
+                                customPopupContent.style.left = e.containerPoint.x + offsetX + 'px';
+                                customPopupContent.style.top = e.containerPoint.y + offsetY + 'px';
+                            }
+
+
+                        
+                    }
+                    
+
+
+
+                });
 
                 
-                cities.push(cityProperties);
-                
-
-                
-                console.log(cityProperties);
-                console.log(cities);
-
-                
-                const cityName = cityData.name;
-                const cityCoordinates = [cityData.coordinates.lat, cityData.coordinates.lon];
-                const cityPopulation = cityData.population;
-
-                updatePopulationandCityCounter(cityPopulation);
-                console.log(cityData.geoname_id);
-                
-
-                // Create a circle marker for the city with dynamic radius
-                const circle = L.circle(cityCoordinates, {
-                    radius: getRadiusFromPopulation(cityPopulation, 5000),
-                    fillColor: 'red',
-                    color: 'black',
-                    weight: 1,
-                    opacity: 1,
-                    fillOpacity: 0.4,
-                    population: cityPopulation,
-                    id: cityData.geoname_id,
-                    coordinates: cityCoordinates
-                }).addTo(map);
-
-                // Create the content for the popup
-                const popupContent = `<b>${cityName}</b><br>Population: ${cityPopulation.toLocaleString()}`;
-
-                // Bind the popup with the content to the circle marker
-                circle.bindPopup(popupContent);
-
-
-                
-                callback(true);
             } else {
-                console.error('City data not found.');
+                console.error('No city data found.');
                 callback(false);
-                return;
             }
         })
         .catch(error => {
@@ -113,10 +161,13 @@ export function loadCities(map, cityName, callback) {
         guessedCities = cities.length;
         document.getElementById('total_population').innerText = 'Total population: ' + totalPopulation.toLocaleString();
         document.getElementById('guessed_cities').innerText = 'Guessed Cities: ' + guessedCities;
-        
     }
-}
 
+
+
+
+
+}
 
 export function getRadiusFromPopulation(population, scalingFactorPopulation) {
 
@@ -130,3 +181,9 @@ export function getRadiusFromPopulation(population, scalingFactorPopulation) {
 
     return radius;
 }
+
+export function returnCities() {
+    return cities;
+}
+
+
