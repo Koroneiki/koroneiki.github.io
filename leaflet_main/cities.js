@@ -91,6 +91,19 @@ export function loadCities(map, apiUrl, callback) {
                     });
 
 
+                    circle.on('mouseover', function (e) {
+                        this.setStyle({
+                            fillColor: 'lightcoral' // Change fill color on hover
+                        });
+                    });
+
+                    // Remove hover animation on mouseout
+                    circle.on('mouseout', function (e) {
+                        this.setStyle({
+                            fillColor: 'red' // Restore original fill color on mouseout
+                        });
+                    });
+
                     if(custompopupEnabled) {
                         // Define custom HTML content for the popup
                         const customPopupContent = document.createElement('div');
@@ -106,35 +119,29 @@ export function loadCities(map, apiUrl, callback) {
                         
 
                         
-                                // Add hover animation on mouseover
-                            circle.on('mouseover', function (e) {
-                                this.setStyle({
-                                    fillColor: 'lightcoral' // Change fill color on hover
-                                });
-                                customPopupContent.style.display = 'block';
-                                updatePopupPosition(e);
-                            });
+                        // Add hover animation on mouseover
+                        circle.on('mouseover', function (e) {
+                            customPopupContent.style.display = 'block';
+                            updatePopupPosition(e);
+                        });
 
-                            // Remove hover animation on mouseout
-                            circle.on('mouseout', function (e) {
-                                this.setStyle({
-                                    fillColor: 'red' // Restore original fill color on mouseout
-                                });
-                                customPopupContent.style.display = 'none';
-                            });
+                        // Remove hover animation on mouseout
+                        circle.on('mouseout', function (e) {
+                            customPopupContent.style.display = 'none';
+                        });
 
-                            // Update the position of the custom popup based on the mouse cursor
-                            map.on('mousemove', function (e) {
-                                updatePopupPosition(e);
-                            });
+                        // Update the position of the custom popup based on the mouse cursor
+                        map.on('mousemove', function (e) {
+                            updatePopupPosition(e);
+                        });
 
-                            // Function to update the position of the custom popup based on the mouse cursor
-                            function updatePopupPosition(e) {
-                                const offsetX = 0;
-                                const offsetY = -customPopupContent.offsetHeight;
-                                customPopupContent.style.left = e.containerPoint.x + offsetX + 'px';
-                                customPopupContent.style.top = e.containerPoint.y + offsetY + 'px';
-                            }
+                        // Function to update the position of the custom popup based on the mouse cursor
+                        function updatePopupPosition(e) {
+                            const offsetX = 0;
+                            const offsetY = -customPopupContent.offsetHeight;
+                            customPopupContent.style.left = e.containerPoint.x + offsetX + 'px';
+                            customPopupContent.style.top = e.containerPoint.y + offsetY + 'px';
+                        }
 
 
                         

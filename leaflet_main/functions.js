@@ -1,5 +1,6 @@
 import {loadCities, getRadiusFromPopulation} from './cities.js';
 import { indexJSvalue } from './map.js';
+import {populationThreshold} from './map.js';
 import { ApiURLConstructor } from './apiconstructor.js';
 
 export function searchCity(map) {
@@ -7,7 +8,7 @@ export function searchCity(map) {
         const input = document.getElementById('input')
         const cityName = input.value;
 
-        const apiUrl = ApiURLConstructor(indexJSvalue, cityName);
+        const apiUrl = ApiURLConstructor(indexJSvalue, populationThreshold, cityName);
 
         console.log(cityName);
         console.log(apiUrl);

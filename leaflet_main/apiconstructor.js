@@ -22,14 +22,13 @@ function constructURL(baseUrl, datasetId, whereConditions, limit) {
     return apiUrl;
 }
 
-export function ApiURLConstructor(indexJSvalue, cityName) {
+export function ApiURLConstructor(indexJSvalue, populationThreshold, cityName) {
     const baseUrl = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/';
     let whereConditions = [];
 
     if (indexJSvalue === 'Free_Mode') {
         const datasetId = 'geonames-all-cities-with-a-population-1000';
         const countryCode = undefined;
-        const populationThreshold = undefined;
         const limit = 1;
 
         const formattedCityName = toTitleCase(cityName.toLowerCase());
@@ -46,7 +45,6 @@ export function ApiURLConstructor(indexJSvalue, cityName) {
     } else if (indexJSvalue === 'DE_Cities') {
         const datasetId = 'geonames-all-cities-with-a-population-1000';
         const countryCode = "DE";
-        const populationThreshold = 500000;
         const limit = 100;
         const cityName = undefined;
 

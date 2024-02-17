@@ -7,20 +7,27 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <div class="central-container">
+   <div class="central-container">
       <div class="selector-box">
         <div class="option" id="free-mode-option">
-            <input type="radio" id="free-mode" name="selector" checked>
-            <label for="free-mode">Freier Modus</label>
+          <input type="radio" id="free-mode" name="selector" checked>
+          <label for="free-mode">Freier Modus</label>
         </div>
         <div class="option" id="german-cities-option">
-            <input type="radio" id="german-cities" name="selector">
-            <label for="german-cities">Größte deutsche Städte</label>
+          <input type="radio" id="german-cities" name="selector">
+          <label for="german-cities">Größte deutsche Städte
+            <div class="slider-container">
+              <input type="range" id="population-slider" min="100000" max="500000" step="10000" value="500000">
+              <span id="slider-value">Population >100,000</span>
+            </div>
+          </label>
         </div>
       </div>    
-          
-        <button id="start-button">Start</button>
+      <button id="start-button">Start</button>
     </div>
+  
+  
+  
 
     <script type="module" src="index.js"></script>
 </body>

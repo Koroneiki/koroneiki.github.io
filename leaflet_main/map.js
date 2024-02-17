@@ -116,6 +116,7 @@ async function gameFunction() {
 
                 // Initialize guessed cities count
                 let guessedCitiesCount = 0;
+                let guessedCities = [];
 
                 // Iterate over each city in the shuffled array
                 for (const correctCity of shuffledCities) {
@@ -127,13 +128,15 @@ async function gameFunction() {
                     const clickedCity = await new Promise(resolve => {
                         if (clickEnabled) {
                             cities.forEach(city => {
-
-                                city.circle.once('click', function(e) {
-                                    resolve(city);
-                                });
+                                if (!guessedCities.includes(city)) {
+                                    city.circle.once('click', function(e) {
+                                        resolve(city);
+                                    });
+                                }
                             });
                         }
                     });
+
 
                     // Find the corresponding city object from the cities array
                     const currentCity = cities.find(city => city.name === correctCity.name);
@@ -144,8 +147,30 @@ async function gameFunction() {
                         updateScoreContainer(guessedCitiesCount, shuffledCities.length);
                         console.log("Congratulations! You guessed correctly.");
 
+                        guessedCities.push(correctCity);
+
+                        // Remove the click event listener for the clicked city
+                        currentCity.circle.off('click');
+
+                        
+
                         // Change the circle color to green
-                        currentCity.circle.setStyle({ fillColor: 'green' }); // Corrected variable name to currentCity
+                        currentCity.circle.setStyle({ fillColor: 'green' });
+
+                        // Mouseover event for currentCity.circle
+                        currentCity.circle.on('mouseover', function (e) {
+                            this.setStyle({
+                                fillColor: 'lightgreen', // Change fill color on hover
+                            });
+                        });
+
+                        // Mouseout event for currentCity.circle
+                        currentCity.circle.on('mouseout', function (e) {
+                            this.setStyle({
+                                fillColor: 'green' // Restore original fill color on mouseout
+                            });
+                        });
+
                     } else {
                         console.log("Sorry, wrong guess. The correct city was:", correctCity.name);
                     }
@@ -159,12 +184,6 @@ async function gameFunction() {
 
             
             startGuessingGameRandomOrder(cities);
-
-
-            
-
-
-
 
 
 
@@ -190,7 +209,20 @@ export function custompopupEnabled(value) {
 }
 
 export var indexJSvalue = sessionStorage.getItem('selectedOption');
+export var populationThreshold = sessionStorage.getItem('populationValue');
 
+// Function to update the population threshold text
+function updatePopulationThreshold(populationValue) {
+    // Get reference to the span element
+    const populationSpan = document.getElementById('population-value');
+    
+    // Update the text content of the span element with the population value
+    populationSpan.textContent = Number(populationValue).toLocaleString();
+}
+
+// Example usage:
+const populationValue = populationThreshold; // Replace with the actual population value
+updatePopulationThreshold(populationValue);
 
 
 gameFunction();

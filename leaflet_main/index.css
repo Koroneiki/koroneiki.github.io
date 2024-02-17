@@ -43,12 +43,15 @@ body, html {
 .selector-box {
   display: flex;
   margin-bottom: 20px; /* Add margin to space out from other elements */
+  
 }
 
 .option {
   display: flex;
+  flex-direction: column; /* Change to column layout */
   align-items: center;
-  margin-right: 20px; /* Add margin between options */
+  margin-bottom: 20px; /* Add margin below each option */
+  margin-right: 20px;
 }
 
 .option:last-child {
@@ -61,21 +64,37 @@ body, html {
 
 .option label {
   cursor: pointer;
-  padding: 20px; /* Increased padding for larger size */
-  width: 150px; /* Adjust the width to make the boxes square */
-  height: 150px; /* Adjust the height to make the boxes square */
+  padding: 20px;
+  width: 150px;
+  height: 150px;
   background-color: #ccc;
   border: 1px solid #999;
   border-radius: 5px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: center; /* Vertically center content */
   align-items: center;
-  text-align: center; /* Center the text horizontally */
+  text-align: center;
 }
-
 
 .option input[type="radio"]:checked + label {
   background-color: #4CAF50;
   color: white;
 }
 
+.slider-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically center content */
+  align-items: center;
+}
+
+.option input[type="range"] {
+  width: 80%;
+  margin-top: 10px; /* Add margin between text and slider */
+}
+
+#slider-value {
+  margin-top: 10px; /* Add margin between slider and value */
+}
