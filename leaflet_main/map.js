@@ -19,8 +19,8 @@ export var map = L.map('map', {
     center: [51.1657, 10.4515], // Zentriere die Karte auf Deutschland
     zoom: 6, // Passe den initialen Zoom-Level bei Bedarf an
     maxBounds: [ // Definiere den maximalen Bereich der Karte
-    [47.271121 - 10, 5.85249 - 10], // Southwest corner with 10 added to each coordinate
-    [55.065334 + 10, 15.022059 + 10] // Northeast corner with 10 added to each coordinate
+    [90, -220], // Southwest corner
+    [-90, 220] // Northeast corner
     ],
     zoomControl: false,
     layers: [
