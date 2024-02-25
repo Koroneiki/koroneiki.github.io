@@ -1,14 +1,16 @@
-// Function to start the game based on the selected option and slider value
-function startGame(selectedOptionName, populationValue) {
-    // Store the selected option value and slider value in sessionStorage
+// Function to start the game based on the selected option, slider value, and dropdown value
+function startGame(selectedOptionName, populationValue, dropdownValue) {
+    // Store the selected option value, slider value, and dropdown value in sessionStorage
     sessionStorage.setItem('selectedOption', selectedOptionName);
-
+    sessionStorage.setItem('dropdownValue', dropdownValue); // Store dropdown value
+    
     if(populationValue) {
         sessionStorage.setItem('populationValue', populationValue);
     }
 
     console.log(selectedOptionName);
     console.log(populationValue);
+    console.log(dropdownValue);
     
     // Redirect to map.html
     window.location.href = 'map.html';
@@ -21,24 +23,27 @@ document.getElementById('start-button').addEventListener('click', function() {
     
     // Determine the name corresponding to the selected option
     var selectedOptionName;
+    var dropdownValue; // Variable to store the dropdown value
+    var populationValue;
+    
     if (selectedOptionId === 'free-mode') {
         selectedOptionName = 'Free_Mode';
-        var populationValue = undefined;
+        dropdownValue = document.getElementById('free-mode-dropdown').value; // Get dropdown value
+        populationValue = undefined;
     } else if (selectedOptionId === 'german-cities') {
         selectedOptionName = 'DE_Cities';
-        var populationValue = document.getElementById('population-slider').value;
+        dropdownValue = undefined;
+        populationValue = document.getElementById('population-slider').value;
     } else {
         // Handle unexpected option IDs
         console.error('Unexpected option ID:', selectedOptionId);
         return;
     }
     
-    
-    
-    
-    // Start the game with the selected option and slider value
-    startGame(selectedOptionName, populationValue);
+    // Start the game with the selected option, dropdown value, and slider value
+    startGame(selectedOptionName, populationValue, dropdownValue);
 });
+
 
 
 // Get references to the slider and span elements
@@ -56,10 +61,13 @@ function updateSliderValue() {
     // Update the text content of the span element with the formatted number
     sliderValue.textContent = `Population > ${formattedNumber}`;
 }
+
+document.addEventListener("DOMContentLoaded", (event) => {
+    updateSliderValue();
+});
   
 
 // Add event listener to the slider input event
 slider.addEventListener('input', updateSliderValue);
 
-// Initial call to update the slider value when the page loads
-updateSliderValue();
+

@@ -1,4 +1,5 @@
 import {map} from './map.js';
+
 import { searchCity, handleInputChange, setTileLayer, updateCircleRadius } from './functions.js';
 
 const input = document.getElementById('input');
@@ -70,3 +71,6 @@ slider.addEventListener("input", function() {
     // Update the circle radius based on the new scaling factor
     updateCircleRadius(map, parseFloat(slider.value)); // Convert slider value to a float
 });
+
+
+

@@ -1,6 +1,7 @@
 
 
-import { custompopupEnabled } from "./map.js";
+import { custompopupEnabled } from "./gamefunction.js";
+import { getCityStatistics, setCityStatistics } from './gamefunction.js';
 
 let totalPopulation = 0;
 let guessedCities = 0;
@@ -25,8 +26,20 @@ export function loadCities(map, apiUrl, callback) {
 
             console.log('API data loaded successfully:', data);
 
+            const total_count = data.total_count;
+            console.log("Total count: " + total_count);
+            
+
+            
+            
+            
+            if(getCityStatistics()) {
+                setCityStatistics(false);
+                return callback(false);               
+            }
+
             // Extract city information from the API response
-            const cityResults = data.results; // Assuming the API returns multiple city results
+            const cityResults = data.results; 
 
             if (cityResults && cityResults.length > 0) {
                 cityResults.forEach(cityData => {

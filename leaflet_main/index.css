@@ -90,10 +90,27 @@ body, html {
   align-items: center;
 }
 
+.dropdown-container {
+  margin-top: 10px;
+  background-color: transparent;
+}
+
+.option select {
+  width: auto; /* Make the select element fill its container */
+  padding: 6px; /* Add padding inside the select */
+  font-size: 14px; /* Adjust font size */
+  border: none; /* Remove default select border */
+  outline: none; /* Remove outline */
+  background-color: transparent; /* Set transparent background */
+  cursor: pointer; /* Change cursor to pointer */
+}
+
+
 .option input[type="range"] {
   width: 80%;
   margin-top: 10px; /* Add margin between text and slider */
 }
+
 
 
 #slider-value {

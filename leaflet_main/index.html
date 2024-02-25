@@ -11,7 +11,15 @@
       <div class="selector-box">
         <div class="option" id="free-mode-option">
           <input type="radio" id="free-mode" name="selector">
-          <label for="free-mode">Freier Modus</label>
+          <label for="free-mode">Freier Modus
+          <div class="dropdown-container">
+            <select id="free-mode-dropdown">
+              <option value="World">Welt</option>
+              <option value="Europe">Europa</option>
+              <option value="Germany">Deutschland</option>
+            </select>
+          </div>
+        </label>
         </div>
         <div class="option" id="german-cities-option">
           <input type="radio" id="german-cities" name="selector" checked>
