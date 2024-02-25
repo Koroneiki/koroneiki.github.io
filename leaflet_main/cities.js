@@ -2,6 +2,7 @@
 
 import { custompopupEnabled } from "./gamefunction.js";
 import { getCityStatistics, setCityStatistics } from './gamefunction.js';
+import { getCca2Codes } from "./countries.js";
 
 let totalPopulation = 0;
 let guessedCities = 0;
@@ -53,6 +54,16 @@ export function loadCities(map, apiUrl, callback) {
                         return callback(false);
                         
                     }
+
+                    const cca2Codes = getCca2Codes();
+                    console.log(cca2Codes);
+
+                    if (!cca2Codes.includes(cityData.country_code)) {
+                        console.log("Not included in Settings.");
+                        return callback(false);
+                    }
+                    
+
 
                     const cityName = cityData.name;
                     const cityCoordinates = [cityData.coordinates.lat, cityData.coordinates.lon];

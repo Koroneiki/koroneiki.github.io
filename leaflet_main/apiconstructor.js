@@ -60,14 +60,7 @@ export function ApiURLConstructor(indexJSvalue, populationThreshold, cityName, g
             whereConditions.push(`cou_name_en="${formattedCountryName}"`);
         }
 
-        // Retrieve country codes array
-        const countryCodes = getCca2Codes();
-
-        if (countryCodes.length <= 100) {
-            // Add where conditions for each country code with OR logic
-            const countryCodeConditions = countryCodes.map(countryCode => `country_code="${countryCode}"`).join(' or ');
-            whereConditions.push(`(${countryCodeConditions})`);
-        }
+        
 
 
 
