@@ -20,7 +20,7 @@ export async function gameFunction() {
             }
 
             custompopupEnabled(true);
-            setCityStatistics(true);
+            setCityStatistics(false);
 
             if(dropdownValue === "World") {
                 continent(undefined);
