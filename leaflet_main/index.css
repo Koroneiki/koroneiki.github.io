@@ -53,7 +53,7 @@ body, html {
 
 .option:hover {
   color: white;
-  background-color: greenyellow;
+  background-color: lightgray;
 }
 
 .option {
