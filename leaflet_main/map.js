@@ -6,13 +6,7 @@ import { loadCountries } from './countries.js';
 import { gameFunction } from './gamefunction.js';
 
 
-
-
-
-
-
 var default_map_url = "";
-
 
 // Initialisiere die Leaflet-Karte
 export var map = L.map('map', {
@@ -29,11 +23,6 @@ export var map = L.map('map', {
         })
     ]
 });
-
-
-    
-
-
 
 
 //MAP-OPTIONS
@@ -61,21 +50,14 @@ export var dropdownValue = sessionStorage.getItem('dropdownValue');
 
 
 
-
 gameFunction();
-
-
 
 loadCountries(map);
 
 
 
-
-
-
-// Function to update the population threshold text
 function updatePopulationThreshold(populationValue) {
-    // Get reference to the span element
+    
     const populationSpan = document.getElementById('population-value');
     
     // Update the text content of the span element with the population value
@@ -83,7 +65,7 @@ function updatePopulationThreshold(populationValue) {
 }
 
 
-const populationValue = populationThreshold; // Replace with the actual population value
+const populationValue = populationThreshold;
 updatePopulationThreshold(populationValue);
 
 
