@@ -1,40 +1,62 @@
 import {loadCities, getRadiusFromPopulation} from './cities.js';
 import { indexJSvalue } from './map.js';
-import {populationThreshold} from './map.js';
+import { renderChatMessage } from './chat.js';
 import { ApiURLConstructor } from './apiconstructor.js';
-import { getCityStatistics } from './gamefunction.js';
+import { fetchCountryData } from './data.js';
 
 
-
+// Function to convert string to title case
+export function toTitleCase(str) {
+    return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
 
 
 
 
 export async function searchCity(map) {
     return new Promise(async (resolve, reject) => {
-        const input = document.getElementById('input')
-        const cityName = input.value;
+        try {
+            const input = document.getElementById('input');
+            const cityName = input.value.trim(); // Trim whitespace from input
 
-        const apiUrl = ApiURLConstructor(indexJSvalue, populationThreshold, cityName, getCityStatistics());
-
-        console.log(cityName);
-        console.log(apiUrl);
-
-        // Use await to wait for loadCities to complete
-        loadCities(map, apiUrl, function (success) {
-            if (success) {
-                input.value = "";
-                resolve();
-            } else {
-                
-                resolve();
+            if (!cityName) {
+                throw new Error('Please enter a city name.'); // Validate input
             }
-        });
+
+            const apiUrl = await ApiURLConstructor(indexJSvalue, cityName);
+
+            console.log(cityName);
+            console.log(apiUrl);
+
+            // Use await to wait for loadCities to complete
+            loadCities(map, apiUrl, function (success) {
+                if (success) {
+                    renderChatMessage();
+                    input.value = ""; // Clear input after successful search
+                    resolve();
+                } else {
+                    shakeInputElement(); // Animate input element on failure
+                    resolve();
+                }
+            });
+        } catch (error) {
+            console.error('Error searching for city:', error.message);
+            reject(error); // Reject promise with error
+        }
     });
 }
 
 
 
+function shakeInputElement() {
+    const input = document.getElementById('input');
+    input.classList.add('shake_input');
+    
+    // Remove the 'shake_input' class after the animation duration to allow for subsequent shakes
+    setTimeout(() => {
+        input.classList.remove('shake_input');
+    }, 500); // Adjust the duration as needed
+}
 
 
 
@@ -44,20 +66,24 @@ export function handleInputChange() {
 
 
 export function setTileLayer(map, layer) {
-    
     console.log('Setting tile layer:', layer);
+
+    // Remove existing tile layers from the map
     map.eachLayer(function (currentLayer) {
         if (currentLayer instanceof L.TileLayer) {
             console.log('Removing layer:', currentLayer);
-            map.removeLayer(currentLayer); // Remove basemap layers
+            map.removeLayer(currentLayer);
         }
     });
+
+    // Add the new tile layer to the map if provided
     if (layer) {
         console.log('Adding new layer:', layer);
-        layer.addTo(map); // Add new layer if provided
+        layer.addTo(map);
         layer.bringToBack();
     }
 }
+
     
 
 export function updateCircleRadius(map, scalingFactor) {
@@ -72,54 +98,6 @@ export function updateCircleRadius(map, scalingFactor) {
 
 
 
-
-export async function fetchCountryData() {
-
-    const apiUrl = 'https://restcountries.com/v3.1/all';
-    const excludedCca3Codes = ['UNK', 'PSE'];
-
-    try {
-        // Start the timer
-        const startTime = performance.now();
-        
-        // Fetch data from the API
-        const response = await fetch(apiUrl);
-        
-        // If response is not okay, throw an error
-        if (!response.ok) {
-            throw new Error('Failed to fetch data');
-        }
-        
-        // Parse the JSON response
-        let data = await response.json();
-
-        // Filter out entries where independent is not true
-        data = data.filter(country => country.independent === true || excludedCca3Codes.includes(country.cca3));
-        
-
-        
-        // Stop the timer
-        const endTime = performance.now();
-        
-        // Calculate the response time
-        const responseTime = endTime - startTime;
-        console.log('Response time (ms):', responseTime);
-
-        console.log(data);
-
-        const subregions = [...new Set(data.map(country => country.subregion))];
-
-        // Log the available subregions
-        console.log('Available Subregions:', subregions);
-
-
-        
-        return data;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        return null;
-    }
-}
 
 
 // Function to extract country name, cca2, and cca3 codes from the provided API data

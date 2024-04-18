@@ -1,7 +1,6 @@
 
 
 import { custompopupEnabled } from "./gamefunction.js";
-import { getCityStatistics, setCityStatistics } from './gamefunction.js';
 import { getCca2Codes } from "./countries.js";
 
 let totalPopulation = 0;
@@ -28,16 +27,8 @@ export function loadCities(map, apiUrl, callback) {
             console.log('API data loaded successfully:', data);
 
             const total_count = data.total_count;
-            console.log("Total count: " + total_count);
+            console.log("Total count: " + total_count);            
             
-
-            
-            
-            
-            if(getCityStatistics()) {
-                setCityStatistics(false);
-                return callback(false);               
-            }
 
             // Extract city information from the API response
             const cityResults = data.results; 
@@ -78,37 +69,23 @@ export function loadCities(map, apiUrl, callback) {
                         weight: 1,
                         opacity: 1,
                         fillOpacity: 0.4,
-                        population: cityPopulation,
-                        id: cityData.geoname_id,
-                        coordinates: cityCoordinates
                     }).addTo(map);
 
 
 
-                    // Extract city properties
-                    const cityProperties = {
-                        name: cityData.name,
-                        coordinates: [cityData.coordinates.lat, cityData.coordinates.lon],
-                        population: cityData.population,
-                        geoname_id: cityData.geoname_id,
-                        circle: circle
-                    };
+                    cityData.circle = circle;
 
                     
-
                     
+                    // Push the city object to the cities array
+                    cities.push(cityData);
 
-                    callback(true);
-
-                    cities.push(cityProperties);
-
-                    console.log(cityProperties);
-                    console.log(cities);
+                    console.log(cityData);
 
                     
                     updatePopulationandCityCounter(cityPopulation);
                     
-                    
+                    callback(true);
 
                     circle.on('click', function() {
                         console.log(cityName);
@@ -167,12 +144,9 @@ export function loadCities(map, apiUrl, callback) {
                             customPopupContent.style.top = e.containerPoint.y + offsetY + 'px';
                         }
 
-
-                        
+           
                     }
-                    
-
-
+    
 
                 });
 
@@ -193,10 +167,6 @@ export function loadCities(map, apiUrl, callback) {
         document.getElementById('total_population').innerText = 'Total population: ' + totalPopulation.toLocaleString();
         document.getElementById('guessed_cities').innerText = 'Guessed Cities: ' + guessedCities;
     }
-
-
-
-
 
 }
 

@@ -1,7 +1,9 @@
 
 import { map, indexJSvalue, dropdownValue } from "./map.js";
-import { searchCity} from './functions.js';
 import { returnCities } from './cities.js';
+import { ApiURLConstructor } from "./apiconstructor.js";
+import { loadCities } from "./cities.js";
+import { callWithDifferentPopulations } from "./statistics.js";
 
 
 export async function gameFunction() {
@@ -22,16 +24,9 @@ export async function gameFunction() {
             custompopupEnabled(true);
             setCityStatistics(false);
 
-            if(dropdownValue === "World") {
-                continent(undefined);
-                countryIsoA3(undefined);
-            } else if(dropdownValue === "Europe") {
-                continent("Europe");
-                countryIsoA3(undefined);
-            } else if(dropdownValue === "Germany") {
-                continent(undefined);
-                countryIsoA3("DEU");
-            }
+            
+
+            callWithDifferentPopulations();
             
             
             
@@ -51,17 +46,25 @@ export async function gameFunction() {
             setCityStatistics(false);
 
 
-            continent(undefined);
-            countryIsoA3("DEU");
+            
 
 
             custompopupEnabled(false);
             clickEnabled(true);
 
-            await searchCity(map);
+            const apiUrl = await ApiURLConstructor(indexJSvalue);
+
+            await new Promise((resolve, reject) => {
+                loadCities(map, apiUrl, function (success) {
+                    // Resolve the promise regardless of success or failure
+                    resolve();
+                });
+            });
 
             const cities = returnCities();
             console.log(cities);
+
+            callWithDifferentPopulations();
 
 
             // Function to shuffle an array
@@ -164,13 +167,8 @@ export async function gameFunction() {
 
 
             }
-
-            
+                      
             startGuessingGameRandomOrder(cities);
-
-
-
-
             
 
         } else {
@@ -183,6 +181,35 @@ export async function gameFunction() {
     }
 }
 
+export function setCountries() {
+
+    var selectedOption = indexJSvalue;
+    console.log(selectedOption);
+
+    if (selectedOption === 'Free_Mode') {
+
+        if(dropdownValue === "World") {
+            continent(undefined);
+            countryIsoA3(undefined);
+        } else if(dropdownValue === "Europe") {
+            continent("Europe");
+            countryIsoA3(undefined);
+        } else if(dropdownValue === "Germany") {
+            continent(undefined);
+            countryIsoA3("DEU");
+
+            console.log(continent);
+        }
+
+    }  else if (selectedOption === 'DE_Cities') {
+
+        continent(undefined);
+        countryIsoA3("DEU");
+
+    }
+
+
+}
 
 
 

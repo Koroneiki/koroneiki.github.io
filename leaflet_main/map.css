@@ -63,6 +63,22 @@ body, html {
 }
 
 
+/* Define the CSS animation */
+@keyframes shake_input {
+    0%, 100% { transform: translateX(0); }
+    10%, 90% { transform: translateX(-3px); }
+    20%, 80% { transform: translateX(3px); }
+    30%, 70% { transform: translateX(-3px); }
+    40%, 60% { transform: translateX(3px); }
+}
+
+
+/* Apply the animation to the input field */
+.shake_input {
+    animation: shake_input 0.5s ease-in-out;
+}
+
+
 .upper_left-container {
     position: absolute;
     top: 20px; 
@@ -70,10 +86,9 @@ body, html {
     z-index: 1000;
     background-color: rgba(255, 255, 255, 0.7); 
     border: 2px solid black;
-    padding: 20px;
     border-radius: 10px;
+    padding: 20px;
     max-width: 35%;
-    
 }
 
 .radio-container,
@@ -87,7 +102,6 @@ body, html {
     margin-bottom: 20px;
     border-radius: 20px;
 }
-
 
 
 .custom-popup {
@@ -110,4 +124,29 @@ body, html {
     color: #fff;
     text-align: center;
     z-index: 1000;
+}
+
+
+#chat-container {
+    position: absolute;
+    bottom: 70px; /* Adjust as needed */
+    left: 10px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column-reverse; /* Stack messages in reverse order */
+}
+
+.chat-message {
+    background-color: rgba(255, 255, 255, 0.8);
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transition: opacity 2s;
+    margin-bottom: 10px; /* Spacing between messages */
+}
+
+.chat-message.fade-out {
+    opacity: 0;
 }

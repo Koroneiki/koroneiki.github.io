@@ -3,7 +3,9 @@ import './eventlisteners.js';
 import './functions.js'
 
 import { loadCountries } from './countries.js';
-import { gameFunction } from './gamefunction.js';
+import { gameFunction, setCountries } from './gamefunction.js';
+import { cacheData } from './data.js';
+
 
 
 var default_map_url = "";
@@ -48,11 +50,13 @@ export var indexJSvalue = sessionStorage.getItem('selectedOption');
 export var populationThreshold = sessionStorage.getItem('populationValue');
 export var dropdownValue = sessionStorage.getItem('dropdownValue');
 
+await cacheData();
 
 
+setCountries();
+await loadCountries(map);
 gameFunction();
 
-loadCountries(map);
 
 
 
@@ -67,6 +71,13 @@ function updatePopulationThreshold(populationValue) {
 
 const populationValue = populationThreshold;
 updatePopulationThreshold(populationValue);
+
+
+
+
+
+
+
 
 
 

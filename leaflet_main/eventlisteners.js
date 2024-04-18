@@ -26,8 +26,7 @@ input.addEventListener('keypress', function(event) {
 });
 
 
-search_button.addEventListener('click', function() {
-    
+search_button.addEventListener('click', function() {   
     searchCity(map);
 });
 
@@ -38,32 +37,40 @@ input.addEventListener('input', function() {
 });
 
 
-document.querySelectorAll('input[name="mapOption1"], input[name="mapOption2"], input[name="mapOption3"]').forEach(function(radio) {
-    radio.addEventListener('change', function() {
-        console.log('Radio button changed:', this.value);
-        if (this.checked) {
-            if (this.value === 'NoMap') {
-                console.log('Selected: No Map');
-                setTileLayer(map, null); // Remove the basemap layer
-                // Uncheck the other radio buttons if they're checked
-                document.querySelector('input[name="mapOption2"][value="SatelliteMap"]').checked = false;
-                document.querySelector('input[name="mapOption3"][value="NoLabelsMap"]').checked = false;
-            } else if (this.value === 'SatelliteMap') {
-                console.log('Selected: Satellite Map');
-                setTileLayer(map, SatelliteMapLayer); // Set the satellite map layer
-                // Uncheck the other radio buttons if they're checked
-                document.querySelector('input[name="mapOption1"][value="NoMap"]').checked = false;
-                document.querySelector('input[name="mapOption3"][value="NoLabelsMap"]').checked = false;
-            } else if (this.value === 'NoLabelsMap') {
-                console.log('Selected: Base Map');
-                setTileLayer(map, NoLabelsLayer)
-                // Uncheck the other radio buttons if they're checked
-                document.querySelector('input[name="mapOption1"][value="NoMap"]').checked = false;
-                document.querySelector('input[name="mapOption2"][value="SatelliteMap"]').checked = false;
+// Define a function to handle radio button change events
+function handleRadioButtonChange(event) {
+    const radioValue = event.target.value;
+
+    console.log('Radio button changed:', radioValue);
+
+    // Define the map options
+    const mapOptions = {
+        'NoMap': null,
+        'SatelliteMap': SatelliteMapLayer,
+        'NoLabelsMap': NoLabelsLayer
+    };
+
+    // Check if the radio button is checked and its value is a valid option
+    if (event.target.checked && mapOptions.hasOwnProperty(radioValue)) {
+        console.log(`Selected: ${radioValue}`);
+
+        // Set the appropriate tile layer based on the selected option
+        setTileLayer(map, mapOptions[radioValue]);
+
+        // Uncheck the other radio buttons if they're checked
+        document.querySelectorAll(`input[name^="mapOption"]:checked`).forEach(radio => {
+            if (radio.value !== radioValue) {
+                radio.checked = false;
             }
-        }
-    });
+        });
+    }
+}
+
+// Attach event listeners to all radio buttons
+document.querySelectorAll('input[name^="mapOption"]').forEach(radio => {
+    radio.addEventListener('change', handleRadioButtonChange);
 });
+
 
 
 slider.addEventListener("input", function() {
